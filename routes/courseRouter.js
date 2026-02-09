@@ -12,7 +12,7 @@ import Course from "../models/Course.js";
 const courseRouter = express.Router();
 
 // "logo" = form-data ka field name
-courseRouter.post("/create", upload.any(), courseCreated);
+courseRouter.post("/create", upload.array("logo", 1), courseCreated);
 
 // all courses
 courseRouter.get("/all", getAllCourses);
