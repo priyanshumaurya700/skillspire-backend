@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRouter from "./routes/userRouter.js";
 import courseRouter from "./routes/courseRouter.js";
+import path from "path";
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use("/uploads", express.static("uploads")); // Serve static files from the uploads directory
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads"))); // Serve static files from the uploads directory
 app.use("/api/users", userRouter);
 app.use("/api/courses", courseRouter);
 
