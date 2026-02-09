@@ -1,4 +1,5 @@
 import Course from "../models/Course.js";
+import path from "path";
 
 const getLevelFromPrice = (price) => {
   if (price < 1000) return "Beginner";
@@ -10,7 +11,7 @@ export const courseCreated = async (req, res) => {
   try {
     console.log("req.body:", req.body);
     console.log("req.files:", req.files);
-    const logoPath = req.files?.[0]?.path; // Access the uploaded file path
+    const logoPath = path.relative(process.cwd(), req.files[0].path); // Access the uploaded file path
     if (!logoPath) {
       return res.status(400).json({ message: "Course logo is required." });
     }
