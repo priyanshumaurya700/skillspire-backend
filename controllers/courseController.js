@@ -8,6 +8,8 @@ const getLevelFromPrice = (price) => {
 
 export const courseCreated = async (req, res) => {
   try {
+    console.log("req.body:", req.body);
+    console.log("req.files:", req.files);
     const logoPath = req.files?.[0]?.path; // Access the uploaded file path
     if (!logoPath) {
       return res.status(400).json({ message: "Course logo is required." });
@@ -18,14 +20,18 @@ export const courseCreated = async (req, res) => {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    const level = getLevelFromPrice(Number(price));
+    const numericPrice = Number(price);
+    if (isNaN(numericPrice)) {
+      return res.status(400).json({ message: "Price must be a number." });
+    }
+    const level = getLevelFromPrice(numericPrice);
 
     // Create new course
     const newCourse = new Course({
       title,
       description,
-      price,
-      startDate,
+      price: numericPrice,
+      startDate: new Date(startDate),
       level,
       logo: logoPath, //image path /url
     });
