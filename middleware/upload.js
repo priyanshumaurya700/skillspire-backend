@@ -1,14 +1,7 @@
 import express from "express";
 import multer from "multer";
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Specify the directory to save uploaded files
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname); // Generate a unique filename
-  },
-});
+const storage = multer.memoryStorage(); // Store files in memory for processing
 
 // File filter to allow only image files
 const fileFilter = (req, file, cb) => {

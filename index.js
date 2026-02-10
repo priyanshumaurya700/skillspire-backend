@@ -12,6 +12,7 @@ const app = express();
 
 connectDB();
 
+
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
@@ -19,7 +20,7 @@ app.use(
   }),
 );
 app.use(express.json());
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads"))); // Serve static files from the uploads directory
+app.use(express.urlencoded({ extended: true })); 
 app.use("/api/users", userRouter);
 app.use("/api/courses", courseRouter);
 

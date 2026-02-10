@@ -1,3 +1,4 @@
+import cloudinary from "../config/cloudinary.js";
 import Course from "../models/Course.js";
 import path from "path";
 
@@ -15,6 +16,19 @@ export const courseCreated = async (req, res) => {
     if (!logoPath) {
       return res.status(400).json({ message: "Course logo is required." });
     }
+
+    // upload the image to cloudinary and get the url
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({
+        folder: "course_logo",
+      },
+      (error, result)=>{
+        if(error) reject(error);
+        else resolve(result);
+      }
+    ).end(req.file.buffer);
+    });
+
     const { title, description, price, startDate } = req.body;
     // Validate input
     if (!title || !description || !price || !startDate) {
@@ -34,7 +48,7 @@ export const courseCreated = async (req, res) => {
       price: numericPrice,
       startDate: new Date(startDate),
       level,
-      logo: logoPath, //image path /url
+      logo: uploadResult.secure_url, //image path /url
     });
 
     await newCourse.save();
