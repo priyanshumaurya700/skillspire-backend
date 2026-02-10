@@ -3,7 +3,7 @@ import Course from "../models/Course.js";
 import path from "path";
 
 const getLevelFromPrice = (price) => {
-  if (price < 1000) return "Beginner";
+  if (price < 2000) return "Beginner";
   if (price <= 5000) return "Intermediate";
   return "Advanced";
 };
