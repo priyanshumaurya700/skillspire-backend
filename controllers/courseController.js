@@ -11,11 +11,11 @@ const getLevelFromPrice = (price) => {
 export const courseCreated = async (req, res) => {
   try {
     console.log("req.body:", req.body);
-    console.log("req.files:", req.files);
-    const logoPath = path.relative(process.cwd(), req.files[0].path); // Access the uploaded file path
-    if (!logoPath) {
-      return res.status(400).json({ message: "Course logo is required." });
-    }
+    console.log("req.file:", req.file);
+    // const logoPath = path.relative(process.cwd(), req.files[0].path); // Access the uploaded file path
+    // if (!logoPath) {
+    //   return res.status(400).json({ message: "Course logo is required." });
+    // }
 
     // upload the image to cloudinary and get the url
     const uploadResult = await new Promise((resolve, reject) => {
