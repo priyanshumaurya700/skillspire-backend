@@ -10,55 +10,51 @@ const getLevelFromPrice = (price) => {
 
 export const courseCreated = async (req, res) => {
   try {
-    console.log("req.body:", req.body);
-    console.log("req.file:", req.file);
-    // const logoPath = path.relative(process.cwd(), req.files[0].path); // Access the uploaded file path
-    // if (!logoPath) {
-    //   return res.status(400).json({ message: "Course logo is required." });
-    // }
-
-    // upload the image to cloudinary and get the url
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({
-        folder: "course_logo",
-      },
-      (error, result)=>{
-        if(error) reject(error);
-        else resolve(result);
-      }
-    ).end(req.file.buffer);
-    });
-
     const { title, description, price, startDate } = req.body;
-    // Validate input
+
     if (!title || !description || !price || !startDate) {
       return res.status(400).json({ message: "All fields are required." });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Course logo is required." });
     }
 
     const numericPrice = Number(price);
     if (isNaN(numericPrice)) {
       return res.status(400).json({ message: "Price must be a number." });
     }
+
+    // Upload to Cloudinary
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder: "course_logo" }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        })
+        .end(req.file.buffer);
+    });
+
     const level = getLevelFromPrice(numericPrice);
 
-    // Create new course
-    const newCourse = new Course({
+    const newCourse = await Course.create({
       title,
       description,
       price: numericPrice,
       startDate: new Date(startDate),
       level,
-      logo: uploadResult.secure_url, //image path /url
+      logo: uploadResult.secure_url,
     });
 
-    await newCourse.save();
-    res
-      .status(201)
-      .json({ message: "Course created successfully.", course: newCourse });
+    res.status(201).json({
+      message: "Course created successfully.",
+      course: newCourse,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error creating course", error: error.message });
+    res.status(500).json({
+      message: "Error creating course",
+      error: error.message,
+    });
   }
 };
 
