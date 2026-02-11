@@ -14,15 +14,9 @@ connectDB();
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || origin === process.env.CLIENT_URL) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: "https://skillspire-frontend-eta.vercel.app",
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
