@@ -8,6 +8,7 @@ import {
 } from "../controllers/courseController.js";
 import upload from "../middleware/upload.js";
 import Course from "../models/Course.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const courseRouter = express.Router();
 
@@ -18,7 +19,7 @@ courseRouter.post("/create", upload.single("logo"), courseCreated);
 courseRouter.get("/all", getAllCourses);
 
 // GET course by id
-courseRouter.get("/:id", getCourseById);
+courseRouter.get("/:id", protect, getCourseById);
 
 // delete course by using the id
 courseRouter.delete("/delete/:id", deleteCourseById);
