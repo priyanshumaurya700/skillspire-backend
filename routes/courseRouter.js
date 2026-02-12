@@ -19,7 +19,7 @@ courseRouter.post("/create", upload.single("logo"), courseCreated);
 courseRouter.get("/all", getAllCourses);
 
 // GET course by id
-courseRouter.get("/:id", protect, getCourseById);
+courseRouter.get("/:id", getCourseById);
 
 // delete course by using the id
 courseRouter.delete("/delete/:id", deleteCourseById);
