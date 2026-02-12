@@ -10,6 +10,13 @@ const getLevelFromPrice = (price) => {
 
 export const courseCreated = async (req, res) => {
   try {
+    // only admin can create course
+    if (req.user.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "Only admin can create courses." });
+    }
+
     const { title, description, price, startDate } = req.body;
 
     if (!title || !description || !price || !startDate) {
@@ -44,6 +51,8 @@ export const courseCreated = async (req, res) => {
       startDate: new Date(startDate),
       level,
       logo: uploadResult.secure_url,
+      // ✅ Admin ID Save
+      createdBy: req.user.id,
     });
 
     res.status(201).json({
