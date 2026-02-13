@@ -1,6 +1,7 @@
 import cloudinary from "../config/cloudinary.js";
 import Course from "../models/Course.js";
 import path from "path";
+import CourseAssignment from "../models/CourseAssignment.js";
 
 const getLevelFromPrice = (price) => {
   if (price < 2000) return "Beginner";
@@ -131,5 +132,40 @@ export const updateCourseById = async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to update course", error: error.message });
+  }
+};
+
+// admin assign course to teacher
+
+export const assignCourseTeacher = async (req, res) => {
+  const { courseId, teacherId } = req.body;
+  try {
+    if (!courseId || !teacherId) {
+      return res.status(400).json({
+        message: "courseId and teacherId are required",
+      });
+    }
+    const existingAssignment = await CourseAssignment.findOne({
+      courseId,
+      teacherId,
+    });
+    if (existingAssignment) {
+      return res
+        .status(400)
+        .json({ message: "This course is already assigned to this teacher." });
+    }
+    const newAssignment = await CourseAssignment.create({
+      courseId,
+      teacherId,
+    });
+    res.status(201).json({
+      message: "Course assigned to teacher successfully",
+      assignment: newAssignment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to assign course to teacher",
+      error: error.message,
+    });
   }
 };

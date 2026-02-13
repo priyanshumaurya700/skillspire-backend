@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  assignCourseTeacher,
   courseCreated,
   deleteCourseById,
   getAllCourses,
@@ -33,5 +34,8 @@ courseRouter.delete("/delete/:id", protect, adminOnly, deleteCourseById);
 
 // update or edit course by using the id
 courseRouter.put("/:id", protect, adminOnly, upload.any(), updateCourseById);
+
+// assing course to a teacher
+courseRouter.post("/assign", assignCourseTeacher);
 
 export default courseRouter;
