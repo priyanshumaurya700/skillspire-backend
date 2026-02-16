@@ -6,6 +6,7 @@ import userRouter from "./routes/userRouter.js";
 import courseRouter from "./routes/courseRouter.js";
 import teacherRouter from "./routes/teacherRouter.js";
 
+
 dotenv.config();
 
 const app = express();

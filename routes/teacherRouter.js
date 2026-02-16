@@ -1,10 +1,10 @@
 import express from "express";
-import { getTeachers } from "../controllers/teacherController";
+import { getTeachers } from "../controllers/teacherController.js";
 
-const router = express.Router();
+const teacherRouter = express.Router();
 
 // get teacher
-router.get("/teachers", getTeachers);
+teacherRouter.get("/teachers", getTeachers);
 
 
-export default router;
+export default teacherRouter;
