@@ -21,6 +21,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRouter);
+app.use("/api/teachers", teacherRouter);
 app.use("/api/courses", courseRouter);
 
 const PORT = process.env.PORT || 3000;
