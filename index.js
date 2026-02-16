@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRouter from "./routes/userRouter.js";
 import courseRouter from "./routes/courseRouter.js";
-import path from "path";
+import teacherRouter from "./routes/teacherRouter.js";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: "https://skillspire-frontend-eta.vercel.app",
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
