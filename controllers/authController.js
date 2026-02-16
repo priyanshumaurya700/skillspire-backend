@@ -52,11 +52,7 @@ export const loginUser = async (req, res) => {
 export const getTeachers = async (req, res) => {
   try {
     const teachers = await registereduser.find({ role: "teacher" });
-    res.status(200).json({
-      success: true,
-      message: "Teachers fetched successfully",
-      data: teachers,
-    });
+    res.status(200).json({ teachers });
   } catch (error) {
     res.status(500).json({
       success: false,
