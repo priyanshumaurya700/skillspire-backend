@@ -1,6 +1,14 @@
 import bcrypt from "bcryptjs";
 import registereduser from "../models/User.js";
 import jwt from "jsonwebtoken";
+
+// generate token
+const generateToken = (id, role) => {
+  return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
+
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -13,13 +21,6 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // generate token
-    const generateToken = (id, role) => {
-      return jwt.sign({ id, role }, process.env.JWT_SECRET, {
-        expiresIn: "30d",
-      });
-    };
-
     // Validate password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -31,18 +32,35 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Login successful",
-      token: generateToken(user._id),
+      token: generateToken(user._id, user.role),
       data: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role, 
+        role: user.role,
       },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "Login failed",
+      error: error.message,
+    });
+  }
+};
+
+export const getTeachers = async (req, res) => {
+  try {
+    const teachers = await registereduser.find({ role: "teacher" });
+    res.status(200).json({
+      success: true,
+      message: "Teachers fetched successfully",
+      data: teachers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch teachers",
       error: error.message,
     });
   }

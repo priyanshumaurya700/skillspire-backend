@@ -5,7 +5,7 @@ export const registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
-    // ✅ role validation (YAHIN)
+    // ✅ role validation
     if (!role || !["student", "teacher"].includes(role)) {
       return res.status(400).json({
         success: false,
@@ -36,7 +36,12 @@ export const registerUser = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      data: newUser,
+      data: {
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
   } catch (error) {
     res.status(500).json({
