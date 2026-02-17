@@ -20,7 +20,7 @@ export const getTeachers = async (req, res) => {
 export const getAssignedCourses = async (req, res) => {
   try {
     const teacherId = req.user.id;
-    const assignments = await CourseAssignment.find({teacherId:req.user.id}).populate("courseId", "title description");
+    const assignments = await CourseAssignment.find({teacherId:req.user.id}).populate("courseId");
     
     const course = assignments.map(assignment => ({
       courseId: assignment.courseId.id,
