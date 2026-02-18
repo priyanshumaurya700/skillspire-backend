@@ -40,6 +40,8 @@ export const loginUser = async (req, res) => {
         role: user.role,
       },
     });
+
+    // localStorage.setItem("token", res.data.token);
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -48,5 +50,3 @@ export const loginUser = async (req, res) => {
     });
   }
 };
-
-
